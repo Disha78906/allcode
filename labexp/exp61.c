@@ -5,7 +5,7 @@ int main ()
 
     printf("Enter n:");
     scanf("%d", &n);
-        int arr[n];
+    int arr[n];
 
 
     printf("enter %d element:\n",n);

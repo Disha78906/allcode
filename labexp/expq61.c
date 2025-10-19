@@ -1,5 +1,6 @@
 #include <stdio.h>
-int main() {
+int main() 
+{
     int n, i;
 
     printf("Enter number of elements: ");
@@ -8,15 +9,18 @@ int main() {
     int arr[n];
 
     printf("Enter %d elements:\n", n);
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < n; i++) 
+    {
         scanf("%d", &arr[i]);
     }
 
     int largest = arr[0];  
 
-    for (i = 1; i < n; i++) {
-        if (arr[i] > largest) {
-            largest = arr[i];   // update largest
+    for (i = 1; i < n; i++) 
+    {
+        if (arr[i] > largest) 
+        {
+            largest = arr[i];   
         }
     }
 

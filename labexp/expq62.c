@@ -1,6 +1,7 @@
 #include <stdio.h>
 
-int main() {
+int main() 
+{
     int n, i;
     int arr[100];
     int pos = 0, neg = 0, even = 0, odd = 0;
@@ -9,11 +10,13 @@ int main() {
     scanf("%d", &n);
 
     printf("Enter %d integers:\n", n);
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < n; i++) 
+    {
         scanf("%d", &arr[i]);
     }
 
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < n; i++) 
+    {
         if (arr[i] > 0)
             pos++;
         else if (arr[i] < 0)
@@ -25,7 +28,7 @@ int main() {
             odd++;
     }
 
-    printf("\nResults:\n");
+    printf("Results:\n");
     printf("Positive numbers: %d\n", pos);
     printf("Negative numbers: %d\n", neg);
     printf("Even numbers: %d\n", even);
