@@ -33,6 +33,7 @@ static void safe_readline(char *buf, size_t size) {
     if (len>0 && buf[len-1]=='\n') buf[len-1]='\0';
 }
 //ek func banye ge jis se secure way me line input + error handle krr sake 
+	
 
 void showMenu() {
     printf("\nChoose mood:\n1.Happy 2.Sad 3.Party 4.Add Song 5.Exit\nEnter choice: ");
