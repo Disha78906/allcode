@@ -3,7 +3,6 @@
 #include <string.h>
 #include <time.h>
 
-/* Function prototypes */
 void happy(void);
 void sad(void);
 void romantic(void);
