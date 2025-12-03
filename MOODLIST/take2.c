@@ -2,97 +2,391 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#define BUFFER_SIZE 512
-//buf var create krr dega jisme 512 char ka tempory store kr sake ge
-struct Song {
-    char name[100];
-    char artist[50];
-    char mood[20];
-    char youtubeLink[200];
-    char spotifyLink[200];
-    char localPath[200];
-};
-//hrr song ke 6 details store karega song ke ander
 
-// songs array me store kiye gaye hain
-struct Song songs[100] = {
-    {"Gallan Goodiyan", "Dil Dhadakne Do", "happy", "https://youtube.com/...", "https://spotify.com/...", ""},
-    {"Badtameez Dil", "YJHD", "happy", "https://youtube.com/...", "https://spotify.com/...", ""},
-    {"Channa Mereya", "Arijit Singh", "sad", "https://youtube.com/...", "https://spotify.com/...", ""},
-    {"Tujhe Kitna Chahne Lage", "Arijit Singh", "sad", "https://youtube.com/...", "https://spotify.com/...", ""},
-    {"Kala Chashma", "Baar Baar Dekho", "party", "https://youtube.com/...", "https://spotify.com/...", ""},
-    {"Kar Gayi Chull", "Kapoor & Sons", "party", "https://youtube.com/...", "https://spotify.com/...", ""},
-    // will add more songs
-};
-int totalSongs = 6;
+void happy(void);
+void sad(void);
+void romantic(void);
+void chill(void);
+void energetic(void);
+void saveMood(char mood[]);
+void showWeeklyReport(void);
 
+// ------------------------ HAPPY ---------------------------------
+void happy() 
+{
+    int choice;
+    saveMood("Happy");
 
-static void safe_readline(char *buf, size_t size) {
-    if (fgets(buf, (int)size, stdin) == NULL) { buf[0]='\0'; return; }
-    size_t len = strlen(buf);
-    if (len>0 && buf[len-1]=='\n') buf[len-1]='\0';
-}
-//ek func banye ge jis se secure way me line input + error handle krr sake 
-	
+    char *quotes[3] = {
+        "Happiness is the highest level of success.",
+        "This is the beginning of loving yourself.",
+        "You glow differently when you're actually happy."
+    };
 
-void showMenu() {
-    printf("\nChoose mood:\n1.Happy 2.Sad 3.Party 4.Add Song 5.Exit\nEnter choice: ");
-}
-// mood menu
+    char *songs[5] = {
+        "Ilahi - Yeh Jawaani Hai Deewani",
+        "Gallan Goodiyan - Dil Dhadakne Do",
+        "Badtameez Dil - YJHD",
+        "Dil Chahta Hai - Title Track",
+        "Aaj Ki Raat - Don"
+    };
 
+    char youtubeLink[] = "https://youtube.com/playlist?list=PLtZIcYm1NcznNE6v-o5hT9u5zgPSYjg8s&si=ERUAd89hgs5hTHDS";
+    char spotifyLink[] = "https://open.spotify.com/playlist/0CWZAQzmGX4T2yIDk5hjPG?si=fvPLMpD-QUCd0W34SgMDCw";
 
-// Open link os ke according code run hoga  , system(cmd) code will run
-void open_link_if_valid(const char *link) {
-    if (!link || strlen(link)==0) { printf("No link\n"); return; }
-#ifdef _WIN32
-    char cmd[BUFFER_SIZE]; snprintf(cmd,sizeof(cmd),"start \"\" \"%s\"",link);
-#elif __APPLE__
-    char cmd[BUFFER_SIZE]; snprintf(cmd,sizeof(cmd),"open \"%s\"",link);
-#else
-    char cmd[BUFFER_SIZE]; snprintf(cmd,sizeof(cmd),"xdg-open \"%s\"",link);
-#endif
-    system(cmd);
-}
+    printf("\n--------------------------\n");
+    printf("       HAPPY PLAYLIST     \n");
+    printf("--------------------------\n");
 
-// Recommend random song
-void recommendSong(const char mood[]) {
-    struct Song moodSongs[100]; int count=0;
-    for(int i=0;i<totalSongs;i++) if(strcmp(songs[i].mood,mood)==0) moodSongs[count++]=songs[i];
-    if(count==0){ printf("No songs for this mood.\n"); return; }
-    struct Song s = moodSongs[rand()%count];
-    printf("\nRecommended: %s by %s\n", s.name, s.artist);
-    char line[BUFFER_SIZE];
-    printf("1.YouTube 2.Spotify: "); safe_readline(line,sizeof(line));
-    int p=atoi(line); if(p==2 && strlen(s.spotifyLink)>0) open_link_if_valid(s.spotifyLink); 
-    else open_link_if_valid(s.youtubeLink);
+    int index = rand() % 3;
+    printf("%s\n\n", quotes[index]);
+
+    printf("Here are your songs:\n");
+    for (int i = 0; i < 5; i++) {
+        printf("%d. %s\n", i + 1, songs[i]);
+    }
+
+    printf("\nWhere do you want to play?\n");
+    printf("1. YouTube\n2. Spotify\n3. Go Back\n");
+
+    if (scanf("%d", &choice) != 1) {
+        while (getchar() != '\n');
+        return;
+    }
+
+    if (choice == 1) {
+        char cmd[512];
+        sprintf(cmd, "start \"\" \"%s\"", youtubeLink);
+        system(cmd);
+    } else if (choice == 2) {
+        char cmd[512];
+        sprintf(cmd, "start \"\" \"%s\"", spotifyLink);
+        system(cmd);
+    }
 }
 
-// Add new song 100 allow h 
-void addSong() {
-    if(totalSongs>=100){ printf("Song limit reached.\n"); return; }
-    struct Song ns; memset(&ns,0,sizeof(ns)); char buf[BUFFER_SIZE];
-    printf("Song name: "); safe_readline(buf,sizeof(buf)); strncpy(ns.name,buf,sizeof(ns.name)-1);
-    printf("Artist: "); safe_readline(buf,sizeof(buf)); strncpy(ns.artist,buf,sizeof(ns.artist)-1);
-    printf("Mood: "); safe_readline(buf,sizeof(buf)); strncpy(ns.mood,buf,sizeof(ns.mood)-1);
-    printf("YouTube link: "); safe_readline(buf,sizeof(buf)); strncpy(ns.youtubeLink,buf,sizeof(ns.youtubeLink)-1);
-    printf("Spotify link: "); safe_readline(buf,sizeof(buf)); strncpy(ns.spotifyLink,buf,sizeof(ns.spotifyLink)-1);
-    songs[totalSongs++]=ns;
-    printf("Song added.\n");
+// ------------------------ SAD ---------------------------------
+void sad() 
+{
+    int choice;
+    saveMood("Sad");
+
+    char *quotes[3] = {
+        "Some days feel heavy, and thats okay.",
+        "Even broken crayons still color.",
+        "You're allowed to rest. Healing takes time."
+    };
+
+    char *songs[5] = {
+        "Agar Tum Saath Ho - Tamasha",
+        "Channa Mereya - ADHM",
+        "Khairiyat - Chhichhore",
+        "Judaai - Badlapur",
+        "Zaroori Tha - Rahat Fateh Ali Khan"
+    };
+
+    char youtubeLink[] = "https://youtube.com/playlist?list=PLtZIcYm1NcznMiaieM8oFNXNznP26EH-L&si=3lfoN5rY4ZJTUlls";
+    char spotifyLink[] = "https://open.spotify.com/playlist/0J4JiLz0Z2JbeWsBwF58wX?si=Wrlb7HqBTzy1fptfVNbRSA";
+
+    printf("\n--------------------------\n");
+    printf("        SAD PLAYLIST      \n");
+    printf("--------------------------\n");
+
+    int index = rand() % 3;
+    printf("%s\n\n", quotes[index]);
+
+    printf("Here are your songs:\n");
+    for (int i = 0; i < 5; i++) {
+        printf("%d. %s\n", i + 1, songs[i]);
+    }
+
+    printf("\nWhere do you want to play?\n");
+    printf("1. YouTube\n2. Spotify\n3. Go Back\n");
+    printf("Enter your choice: ");
+
+    if (scanf("%d", &choice) != 1) {
+        while (getchar() != '\n');
+        return;
+    }
+
+    if (choice == 1) {
+        char cmd[512];
+        sprintf(cmd, "start \"\" \"%s\"", youtubeLink);
+        system(cmd);
+    } else if (choice == 2) {
+        char cmd[512];
+        sprintf(cmd, "start \"\" \"%s\"", spotifyLink);
+        system(cmd);
+    }
 }
 
-// Main
-int main() {
-    srand((unsigned)time(NULL));
-    char line[BUFFER_SIZE];
-    while(1){
-        showMenu(); safe_readline(line,sizeof(line)); int choice=atoi(line);
-        switch(choice){
-            case 1: recommendSong("happy"); break;
-            case 2: recommendSong("sad"); break;
-            case 3: recommendSong("party"); break;
-            case 4: addSong(); break;
-            case 5: printf("Thanks!\n"); return 0;
-            default: printf("Invalid choice.\n"); break;
+// ------------------------ ROMANTIC ---------------------------------
+void romantic()
+{
+    int choice;
+    saveMood("Romantic");
+
+    char *quotes[3] = {
+        "Your heart knows what feels like home.",
+        "Some people feel like sunsets.",
+        "Love looks good on you."
+    };
+
+    char *songs[5] = {
+        "Raabta - Agent Vinod",
+        "Samjhawan - HSKD",
+        "Kesariya - Brahmastra",
+        "Janam Janam - Dilwale",
+        "Tum Mile - Tum Mile"
+    };
+
+    char youtubeLink[] = "https://youtube.com/playlist?list=PLtZIcYm1NczmISq9v7eM6twfFzSVAofFQ&si=MU7TQy-CrCHFswt7";
+    char spotifyLink[] = "https://open.spotify.com/playlist/3cyH2mysKWkvjLHDjuG3CN?si=2NSHc1oiSDeb4acZFDvc2g";
+
+    printf("\n--------------------------\n");
+    printf("      ROMANTIC PLAYLIST   \n");
+    printf("--------------------------\n");
+
+    int index = rand() % 3;
+    printf("%s\n\n", quotes[index]);
+
+    printf("Here are your songs:\n");
+    for (int i = 0; i < 5; i++) {
+        printf("%d. %s\n", i + 1, songs[i]);
+    }
+
+    printf("\nWhere do you want to play?\n");
+    printf("1. YouTube\n2. Spotify\n3. Go Back\n");
+    printf("Enter your choice: ");
+
+    if (scanf("%d", &choice) != 1) {
+        while (getchar() != '\n');
+        return;
+    }
+
+    if (choice == 1) {
+        char cmd[512];
+        sprintf(cmd, "start \"\" \"%s\"", youtubeLink);
+        system(cmd);
+    } else if (choice == 2) {
+        char cmd[512];
+        sprintf(cmd, "start \"\" \"%s\"", spotifyLink);
+        system(cmd);
+    }
+}
+
+// ------------------------ CHILL ---------------------------------
+void chill()
+{
+    int choice;
+    saveMood("Chill");
+
+    char *quotes[3] = {
+        "Breathe. Everything is figuring itself out.",
+        "Slow moments matter too.",
+        "Peace looks pretty on you."
+    };
+
+    char *songs[5] = {
+        "Baarishein - Anuv Jain",
+        "Kasoor - Prateek Kuhad",
+        "Shayad - Love Aaj Kal",
+        "Safar - Jab Harry Met Sejal",
+        "Phir Le Aaya Dil - Arijit Singh"
+    };
+
+    char youtubeLink[] = "https://youtube.com/playlist?list=PLtZIcYm1NczmNkdUCaB_6sDcPndv9NTBc&si=xwNGB2mRHU9dLakB";
+    char spotifyLink[] = "https://open.spotify.com/playlist/4jh0nrifRE4Ushs76VVdJa?si=fRMCl5oGTJWxJzptHgXPwg";
+
+    printf("\n--------------------------\n");
+    printf("        CHILL PLAYLIST    \n");
+    printf("--------------------------\n");
+
+    int index = rand() % 3;
+    printf("%s\n\n", quotes[index]);
+
+    printf("Here are your songs:\n");
+    for (int i = 0; i < 5; i++) {
+        printf("%d. %s\n", i + 1, songs[i]);
+    }
+
+    printf("\nWhere do you want to play?\n");
+    printf("1. YouTube\n2. Spotify\n3. Go Back\n");
+    printf("Enter your choice: ");
+
+    if (scanf("%d", &choice) != 1) {
+        while (getchar() != '\n');
+        return;
+    }
+
+    if (choice == 1) {
+        char cmd[512];
+        sprintf(cmd, "start \"\" \"%s\"", youtubeLink);
+        system(cmd);
+    } else if (choice == 2) {
+        char cmd[512];
+        sprintf(cmd, "start \"\" \"%s\"", spotifyLink);
+        system(cmd);
+    }
+}
+
+// ------------------------ ENERGETIC ---------------------------------
+void energetic()
+{
+    int choice;
+    saveMood("Energetic");
+
+    char *quotes[3] = {
+        "You're unstoppable today.",
+        "Energy flows where your focus goes.",
+        "Shine like you mean it."
+    };
+
+    char *songs[5] = {
+        "Zinda - Bhaag Milkha Bhaag",
+        "Sultan Title Track - Sultan",
+        "Brothers Anthem - Brothers",
+        "Kar Har Maidaan Fateh - Sanju",
+        "Lakshya - Lakshya"
+    };
+
+    char youtubeLink[] = "https://youtube.com/playlist?list=PLtZIcYm1Nczkm3prSkrDFOEVcIFw4DQ0W&si=AImS9CvP0b8TRtKeB";
+    char spotifyLink[] = "https://open.spotify.com/playlist/5aSdSISIPmOAcL8G421WXr?si=HS6eM7w4QaGci29qpagvKg";
+
+    printf("\n--------------------------\n");
+    printf("     ENERGETIC PLAYLIST   \n");
+    printf("--------------------------\n");
+
+    int index = rand() % 3;
+    printf("%s\n\n", quotes[index]);
+
+    printf("Here are your songs:\n");
+    for (int i = 0; i < 5; i++) {
+        printf("%d. %s\n", i + 1, songs[i]);
+    }
+
+    printf("\nWhere do you want to play?\n");
+    printf("1. YouTube\n2. Spotify\n3. Go Back\n");
+    printf("Enter your choice: ");
+
+    if (scanf("%d", &choice) != 1) {
+        while (getchar() != '\n');
+        return;
+    }
+
+    if (choice == 1) {
+        char cmd[512];
+        sprintf(cmd, "start \"\" \"%s\"", youtubeLink);
+        system(cmd);
+    } else if (choice == 2) {
+        char cmd[512];
+        sprintf(cmd, "start \"\" \"%s\"", spotifyLink);
+        system(cmd);
+    }
+}
+
+// ------------------------ SAVE MOOD ---------------------------------
+void saveMood(char mood[])
+{
+    FILE *fp = fopen("tracker.txt", "a");
+
+    if (fp == NULL) {
+        printf("Error opening tracker file!\n");
+        return;
+    }
+
+    fprintf(fp, "%s\n", mood);
+    fclose(fp);
+}
+
+// ------------------------ WEEKLY REPORT ---------------------------------
+void showWeeklyReport()
+{
+    FILE *fp = fopen("tracker.txt", "r");
+    if (fp == NULL) {
+        printf("No mood history found!\n");
+        return;
+    }
+
+    int happy = 0, sad = 0, romantic = 0, energetic = 0, chill = 0;
+    char mood[50];
+
+    while (fgets(mood, sizeof(mood), fp)) {
+        mood[strcspn(mood, "\n")] = 0;
+
+        if (strcmp(mood, "Happy") == 0) 
+        happy++;
+        else if (strcmp(mood, "Sad") == 0) 
+        sad++;
+        else if (strcmp(mood, "Romantic") == 0) 
+        romantic++;
+        else if (strcmp(mood, "Energetic") == 0) 
+        energetic++;
+        else if (strcmp(mood, "Chill") == 0) 
+        chill++;
+    }
+
+    fclose(fp);
+
+    printf("\n------------------------------\n");
+    printf("         WEEKLY REPORT\n");
+    printf("------------------------------\n\n");
+
+    printf("Happy:      %d\n", happy);
+    printf("Sad:        %d\n", sad);
+    printf("Romantic:   %d\n", romantic);
+    printf("Energetic:  %d\n", energetic);
+    printf("Chill:      %d\n", chill);
+
+    int max = happy;
+    char most[20] = "Happy";
+
+    if (sad > max) { max = sad; strcpy(most, "Sad"); }
+    if (romantic > max) { max = romantic; strcpy(most, "Romantic"); }
+    if (energetic > max) { max = energetic; strcpy(most, "Energetic"); }
+    if (chill > max) { max = chill; strcpy(most, "Chill"); }
+
+    printf("\nMost selected mood: %s\n\n", most);
+}
+
+// ------------------------ MAIN ---------------------------------
+int main()
+{
+    srand((unsigned int)time(NULL));
+    int choice;
+
+    while (1) {
+        printf("\n--------- MOODY PLAYLIST ---------\n"
+               "1. Happy\n"
+               "2. Sad\n"
+               "3. Romantic\n"
+               "4. Chill\n"
+               "5. Energetic\n"
+               "6. Weekly Report\n"
+               "7. Exit\n");
+
+        printf("Enter your choice: ");
+
+        if (scanf("%d", &choice) != 1) {
+            while (getchar() != '\n');
+            continue;
+        }
+
+        switch (choice)
+        {
+            case 1: happy(); break;
+            case 2: sad(); break;
+            case 3: romantic(); break;
+            case 4: chill(); break;
+            case 5: energetic(); break;
+            case 6: showWeeklyReport(); break;
+            case 7:
+                printf("Exiting program...\n");
+                exit(0);
+            default:
+                printf("Invalid choice! Choose 1-7.\n");
         }
     }
+
+    return 0;
 }

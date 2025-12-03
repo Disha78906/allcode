@@ -322,7 +322,7 @@ void showWeeklyReport()
     char mood[50];
 
     while (fgets(mood, sizeof(mood), fp) != NULL) {
-        mood[strcspn(mood, "\n")] = 0;  // remove newline
+        mood[strcspn(mood, "\n")] = 0; 
 
         if (strcmp(mood, "Happy") == 0)
             happy++;
@@ -353,17 +353,29 @@ void showWeeklyReport()
     int max = happy;
     char most[20] = "Happy";
 
-    if (sad > max)       { max = sad; strcpy(most, "Sad"); }
-    if (romantic > max)  { max = romantic; strcpy(most, "Romantic"); }
-    if (energetic > max) { max = energetic; strcpy(most, "Energetic"); }
-    if (chill > max)     { max = chill; strcpy(most, "Chill"); }
+    if (sad > max)       
+    { 
+        max = sad; strcpy(most, "Sad"); 
+    }
+    if (romantic > max)  
+    {
+         max = romantic; strcpy(most, "Romantic");
+    }
+    if (energetic > max) 
+    {
+         max = energetic; strcpy(most, "Energetic"); 
+    }
+    if (chill > max)     
+    { 
+        max = chill; strcpy(most, "Chill"); 
+    }
 
     printf("\nMost selected mood: %s\n\n", most);
 }
 
 int main()
 {
-    srand((unsigned int)time(NULL));   // for random quotes
+    srand((unsigned int)time(NULL));  
     int choice;
 
     while (1) {
@@ -384,12 +396,18 @@ int main()
 
         switch (choice)
         {
-            case 1: happy(); break;
-            case 2: sad(); break;
-            case 3: romantic(); break;
-            case 4: chill(); break;
-            case 5: energetic(); break;
-            case 6: showWeeklyReport(); break;
+            case 1: happy(); 
+            break;
+            case 2: sad(); 
+            break;
+            case 3: romantic(); 
+            break;
+            case 4: chill(); 
+            break;
+            case 5: energetic(); 
+            break;
+            case 6: showWeeklyReport(); 
+            break;
             case 7: 
                 printf("Exiting the program...\n");
                 exit(0);
