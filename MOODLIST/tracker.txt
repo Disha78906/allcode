@@ -10,3 +10,12 @@ Sad
 Happy
 Happy
 Romantic
+Chill
+Romantic
+Happy
+Energetic
+Happy
+Energetic
+Happy
+Sad
+Energetic

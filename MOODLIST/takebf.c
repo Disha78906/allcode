@@ -38,7 +38,7 @@ void happy()
     printf("--------------------------\n");
 
     int index = rand() % 3;
-    printf("%s\n\n", quotes[index]);
+    printf("\n%s\n\n", quotes[index]);
 
     printf("Here are your songs:\n");
     for (int i = 0; i < 5; i++) {
@@ -52,7 +52,7 @@ void happy()
     printf("Enter your choice: ");
     if (scanf("%d", &choice) != 1) { fflush(stdin); return; }
 
-    if (choice == 1) {
+    if (choice == 1) { 
         char cmd[512];
         sprintf(cmd, "start \"\" \"%s\"", youtubeLink);
         system(cmd);
@@ -279,7 +279,13 @@ void energetic()
     printf("2. Spotify\n");
     printf("3. Go Back\n");
     printf("Enter your choice: ");
-    if (scanf("%d", &choice) != 1) { fflush(stdin); return; }
+
+    if (scanf("%d", &choice) != 1) 
+    {
+     printf("Invalid input!\n");
+     scanf("%*s");   
+     return;
+    }
 
     if (choice == 1) {
         char cmd[512];
@@ -389,9 +395,11 @@ int main()
                "7. Exit\n");
 
         printf("Enter your choice: ");
-        if (scanf("%d", &choice) != 1) {
-            fflush(stdin);
-            continue;
+        if (scanf("%d", &choice) != 1) 
+        {
+        printf("Invalid input!\n");
+        scanf("%*s");
+        continue;
         }
 
         switch (choice)
