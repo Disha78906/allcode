@@ -1,6 +1,6 @@
 #include <stdio.h>
 int main()
 {
-    printf("hi; i am gonna bw rich soon");
+    printf("day 4 of push");
     return 0; 
 }
